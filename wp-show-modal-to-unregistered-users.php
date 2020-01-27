@@ -42,8 +42,12 @@ class wpShowModalToUnregisteredUsers {
 			$authUsers[$key] = $user->roles[0].' != "'.$value.'"'; 
 		}
 		$condition = implode(' || ', $authUsers);
-		if(isset($user->roles[0]) && ($condition)) {
-			add_action('admin_enqueue_scripts', array(get_called_class(), 'registerScripts'));
+		if(is_user_logged_in()) {
+			if(isset($user->roles[0]) && ($condition)) {
+				add_action('enqueue_scripts', array(get_called_class(), 'registerScripts'));
+			}
+		} else {
+			add_action('enqueue_scripts', array(get_called_class(), 'registerScripts'));
 		}
     }
 
