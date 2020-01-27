@@ -26,7 +26,7 @@ class wpShowModalToUnregisteredUsers {
 	 * @since  1.0.0
 	 */
     public function __construct() {
-        add_action('enqueue_scripts', array(get_called_class(), 'registerScripts'));
+		add_action('plugins_loaded', array($this, 'showModal'));
 	}
 	
 	/**
