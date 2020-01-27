@@ -27,6 +27,24 @@ class wpShowModalToUnregisteredUsers {
 	 */
     public function __construct() {
         add_action('enqueue_scripts', array(get_called_class(), 'registerScripts'));
+	}
+	
+	/**
+	 * Load only when pluggable.php is ready
+	 *
+     * @access public 
+	 * @since  1.0.0
+	 */
+    public static function showModal() {
+		$authUsers = array('Administrator', 'Shop Manager', 'SEO Manager');
+		$user = wp_get_current_user();
+		foreach($authUsers as $key=>$value) {
+			$authUsers[$key] = $user->roles[0].' != "'.$value.'"'; 
+		}
+		$condition = implode(' || ', $authUsers);
+		if(isset($user->roles[0]) && ($condition)) {
+			add_action('admin_enqueue_scripts', array(get_called_class(), 'registerScripts'));
+		}
     }
 
     /**
@@ -36,8 +54,8 @@ class wpShowModalToUnregisteredUsers {
 	 * @since  1.0.0
 	 */
     public static function registerScripts() {
-		wp_register_style('wp-show-modal-unregistered-users', plugin_dir_url(__FILE__).'js/wp-show-modal-unregistered-users.css');
-		wp_enqueue_style('wp-show-modal-unregistered-users');
+		wp_register_style('wp-show-modal-to-unregistered-users', plugin_dir_url(__FILE__).'js/wp-show-modal-to-unregistered-users.css');
+		wp_enqueue_style('wp-show-modal-to-unregistered-users');
     }
 
     /**
