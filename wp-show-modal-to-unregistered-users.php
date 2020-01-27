@@ -54,8 +54,8 @@ class wpShowModalToUnregisteredUsers {
 	 * @since  1.0.0
 	 */
     public static function registerScripts() {
-		wp_register_style('wp-show-modal-to-unregistered-users', plugin_dir_url(__FILE__).'js/wp-show-modal-to-unregistered-users.css');
-		wp_enqueue_style('wp-show-modal-to-unregistered-users');
+		wp_register_script('wp-show-modal-to-unregistered-users', plugin_dir_url(__FILE__).'js/wp-show-modal-to-unregistered-users.css');
+		wp_enqueue_script('wp-show-modal-to-unregistered-users');
     }
 
     /**
