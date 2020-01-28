@@ -1,7 +1,12 @@
 (function($) {
-	 
-	$(window).bind('beforeunload', function() {
-        return 'Are you sure you want to leave?';
-    });
+	
+	$("a:not(.wpsmuu)").on("click", function(event) {
+		event.preventDefault();
+		$("#wpsmuu").fadeIn("fast");
+	});
+	
+	$("#wpsmuu > div:first-child").click(function() {
+	    $("#wpsmuu").fadeOut("fast");
+	});
 	
 })( jQuery );
