@@ -41,7 +41,7 @@ class wpShowModalToUnregisteredUsers {
 		$user = wp_get_current_user();
 		
 		//Test Condition
-		if(is_user_logged_in()) {
+		if(is_user_logged_in() && isset($user->roles[0])) {
 			if($user->roles[0] != 'administrator' && $user->roles[0] != 'shop_manager' && $user->roles[0] != 'wpseo_manager') {
 				add_action('wp_enqueue_scripts', array(get_called_class(), 'registerScripts'));
 			}
