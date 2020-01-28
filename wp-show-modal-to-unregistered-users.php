@@ -27,6 +27,7 @@ class wpShowModalToUnregisteredUsers {
 	 */
     public function __construct() {
 		add_action('plugins_loaded', array($this, 'showModal'));
+		add_action('get_footer', array($this, 'customModal'));
 	}
 	
 	/**
@@ -36,19 +37,27 @@ class wpShowModalToUnregisteredUsers {
 	 * @since  1.0.0
 	 */
     public static function showModal() {
-		$authUsers = array('Administrator', 'Shop Manager', 'SEO Manager');
+		//Get user role
 		$user = wp_get_current_user();
-		foreach($authUsers as $key=>$value) {
-			$authUsers[$key] = $user->roles[0].' != "'.$value.'"'; 
-		}
-		$condition = implode(' || ', $authUsers);
+		
+		//Test Condition
 		if(is_user_logged_in()) {
-			if(isset($user->roles[0]) && ($condition)) {
-				add_action('enqueue_scripts', array(get_called_class(), 'registerScripts'));
+			if($user->roles[0] != 'administrator' && $user->roles[0] != 'shop_manager' && $user->roles[0] != 'wpseo_manager') {
+				add_action('wp_enqueue_scripts', array(get_called_class(), 'registerScripts'));
 			}
 		} else {
-			add_action('enqueue_scripts', array(get_called_class(), 'registerScripts'));
+			add_action('wp_enqueue_scripts', array(get_called_class(), 'registerScripts'));
 		}
+	}
+	
+	/**
+	 * Custom Modal Method
+	 *
+     * @access public 
+	 * @since  1.0.0
+	 */
+    public static function customModal() {
+        require_once('wp-show-modal-to-unregistered-users-html.php');
     }
 
     /**
@@ -58,8 +67,12 @@ class wpShowModalToUnregisteredUsers {
 	 * @since  1.0.0
 	 */
     public static function registerScripts() {
-		wp_register_script('wp-show-modal-to-unregistered-users', plugin_dir_url(__FILE__).'js/wp-show-modal-to-unregistered-users.js');
-		wp_enqueue_script('wp-show-modal-to-unregistered-users');
+		wp_register_style('wp-show-modal-styles', 'https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900');
+		wp_enqueue_style('wp-show-modal-styles');
+		wp_register_style('wp-show-modal-to-unregistered-users-css', plugin_dir_url(__FILE__).'css/wp-show-modal-to-unregistered-users.css');
+		wp_enqueue_style('wp-show-modal-to-unregistered-users-css');
+		wp_register_script('wp-show-modal-to-unregistered-users-js', plugin_dir_url(__FILE__).'js/wp-show-modal-to-unregistered-users.js', array('jquery'), '1', true);
+		wp_enqueue_script('wp-show-modal-to-unregistered-users-js');
     }
 
     /**
